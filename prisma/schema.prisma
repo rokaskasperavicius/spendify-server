@@ -16,6 +16,7 @@ model Accounts {
   iban           String?
   institution_id String
   status         String?
+  currency       String?
   requisitionId  String
   last_synced    DateTime
   weight         Int      @default(0)
