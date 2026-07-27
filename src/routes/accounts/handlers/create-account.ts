@@ -6,6 +6,7 @@ import { ERROR_CODES, ServerError, ServerRequest, ServerResponse } from '@/lib/t
 
 import {
   getAccountBalanceById,
+  getAccountDetailsById,
   getAccountMetadata,
   getAccountTransactionsById,
   getInstitutionById,
@@ -73,6 +74,7 @@ export const createAccount = async (req: ServerRequest<Request['body']>, res: Se
   // TODO: Catch errors from gocardless and check if 429 rate limit is reached
   // RequisitionID should still be updated in that case, just not the account info.
   const { data: metadata } = await getAccountMetadata(accountId)
+  const { data: details } = await getAccountDetailsById(accountId)
   const {
     data: { balances },
   } = await getAccountBalanceById(accountId)
@@ -96,6 +98,7 @@ export const createAccount = async (req: ServerRequest<Request['body']>, res: Se
         name: metadata?.name,
         iban: metadata?.iban,
         status: requisition?.status,
+        currency: details.account.currency,
         balance: totalBalance,
         requisitionId: requisitionId,
         last_synced: new Date(),
@@ -114,6 +117,7 @@ export const createAccount = async (req: ServerRequest<Request['body']>, res: Se
         name: metadata?.name,
         iban: metadata?.iban,
         status: requisition?.status,
+        currency: details.account.currency,
         balance: totalBalance,
         requisitionId: requisitionId,
         last_synced: new Date(),

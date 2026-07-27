@@ -5,6 +5,7 @@ import { validateSchema, verifyUser } from '@/middlewares'
 import { CreateAccountSchema, createAccount } from './handlers/create-account'
 import { CreateAccountRequisitionSchema, createAccountRequisition } from './handlers/create-account-requisition'
 import { DeleteAccountSchema, deleteAccount } from './handlers/delete-account'
+import { GetAccountCountriesSchema, getAccountCountries } from './handlers/get-account-countries'
 import { GetAccountInstitutionsSchema, getAccountInstitutions } from './handlers/get-account-institutions'
 import { GetAccountTransactionsSchema, getAccountTransactions } from './handlers/get-account-transactions'
 import {
@@ -22,6 +23,7 @@ import { SyncAccountTransactionsSchema, syncAccountTransactions } from './handle
 
 const app = express.Router()
 
+app.get('/countries', validateSchema(GetAccountCountriesSchema), getAccountCountries)
 app.get('/institutions', validateSchema(GetAccountInstitutionsSchema), getAccountInstitutions)
 app.post('/create-requisition', verifyUser, validateSchema(CreateAccountRequisitionSchema), createAccountRequisition)
 app.get('/available/:requisitionId', verifyUser, validateSchema(GetAvailableAccountsSchema), getAvailableAccounts)

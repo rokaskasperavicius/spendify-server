@@ -30,7 +30,7 @@ export const getAccounts = async (req: ServerRequest, res: ServerResponse) => {
         name: account.name,
         iban: account.iban,
         status: account.status,
-        balance: gocardlessCurrency(account.balance).format(),
+        balance: `${gocardlessCurrency(account.balance).format()} ${account.currency}`,
         institutionId: account.institutions.id,
         institutionName: account.institutions?.name,
         institutionLogo: account.institutions?.logo,

@@ -6,6 +6,7 @@ import { ERROR_CODES, ServerError, ServerRequest, ServerResponse } from '@/lib/t
 
 import {
   getAccountBalanceById,
+  getAccountDetailsById,
   getAccountMetadata,
   getInstitutionById,
   getRequisitionById,
@@ -67,6 +68,7 @@ export const getAvailableAccounts = async (
 
   const accounts = data.accounts.map(async (accountId) => {
     const { data: metadata } = await getAccountMetadata(accountId)
+    const { data: details } = await getAccountDetailsById(accountId)
     const { data: institution } = await getInstitutionById(String(metadata.institution_id))
 
     const {
@@ -77,7 +79,7 @@ export const getAvailableAccounts = async (
       accountId,
       accountName: metadata.name,
       accountIban: metadata.iban,
-      accountBalance: gocardlessCurrency(balances && balances[0]?.balanceAmount.amount).format(),
+      accountBalance: `${gocardlessCurrency(balances && balances[0]?.balanceAmount.amount).format()} ${details.account.currency}`,
       institutionLogo: institution.logo,
     }
   })

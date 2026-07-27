@@ -333,6 +333,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+  /accounts/countries:
+    get:
+      summary: Get all available countries
+      operationId: getCountries
+      tags:
+        - Accounts API
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                required:
+                  - data
+                allOf:
+                  - $ref: '#/components/schemas/ApiResponse'
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - id
+                        - name
+                        - flagUrl
+                      properties:
+                        id:
+                          type: string
+                          example: 'DKK'
+                        name:
+                          type: string
+                          example: 'Denmark'
+                        flagUrl:
+                          type: string
+                          example: 'https://flagcdn.com/dk.svg'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
   /accounts/institutions:
     get:
       summary: Get all Institutions
@@ -345,6 +386,14 @@ paths:
           schema:
             type: string
           description: The query to search among institution names
+        - in: query
+          name: country
+          schema:
+            type: string
+            enum:
+              - DK
+              - LT
+          description: ISO 3166 two-character country code
       responses:
         '200':
           description: Success
@@ -477,7 +526,7 @@ paths:
                           example: 'DK4404005032950081'
                         accountBalance:
                           type: string
-                          example: '50.380,90'
+                          example: '50.380,90 DKK'
                         institutionLogo:
                           type: string
                           example: 'https://cdn-logos.gocardless.com/ais/SANDBOXFINANCE_SFIN0000.png'
@@ -540,7 +589,7 @@ paths:
                               example: 'DK4404005032950081'
                             balance:
                               type: string
-                              example: '50.380,90'
+                              example: '50.380,90 DKK'
                             institutionId:
                               type: string
                               example: 'SANDBOXFINANCE_SFIN0000'
@@ -701,11 +750,11 @@ paths:
                           example: 10
                         amount:
                           type: string
-                          example: '-55,95'
+                          example: '-55,95 DKK'
                         totalAmount:
                           description: Total balance left after the transaction
                           type: string
-                          example: '50.380,90'
+                          example: '50.380,90 DKK'
                         totalAmountInt:
                           type: number
                           example: 50380.9
@@ -763,13 +812,13 @@ paths:
                           example: 'September, 2024'
                         expenses:
                           type: string
-                          example: '10.979,45'
+                          example: '10.979,45 DKK'
                         expensesInt:
                           type: number
                           example: 10979.45
                         income:
                           type: string
-                          example: '12.627,45'
+                          example: '12.627,45 DKK'
                         incomeInt:
                           type: number
                           example: 12627.45

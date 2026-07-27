@@ -71,10 +71,10 @@ export const getAccountTransactionsMonthlyOverview = async (
 
       acc.push({
         date: value,
-        expenses: gocardlessCurrency(expenses).format(),
+        expenses: `${gocardlessCurrency(expenses).format()} ${account.currency}`,
         expensesInt: expenses,
 
-        income: gocardlessCurrency(income).format(),
+        income: `${gocardlessCurrency(income).format()} ${account.currency}`,
         incomeInt: income,
       })
 
