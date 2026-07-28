@@ -75,12 +75,10 @@ export const createAccount = async (req: ServerRequest<Request['body']>, res: Se
   // RequisitionID should still be updated in that case, just not the account info.
   const { data: metadata } = await getAccountMetadata(accountId)
   const { data: details } = await getAccountDetailsById(accountId)
-  const {
-    data: { balances },
-  } = await getAccountBalanceById(accountId)
+  const balance = await getAccountBalanceById(accountId)
   const { data: institution } = await getInstitutionById(String(metadata.institution_id))
 
-  const totalBalance = gocardlessCurrency(balances && balances[0]?.balanceAmount.amount).value
+  const totalBalance = gocardlessCurrency(balance).value
 
   const institutionData = {
     id: institution.id,

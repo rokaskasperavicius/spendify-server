@@ -22,16 +22,13 @@ export const syncTransactions = async (accountId?: string) => {
        * We subtract 2 days from the last_synced date to make sure we get all the new transactions
        **/
       const fromDate = formatISO(subDays(new Date(account.last_synced), 2), { representation: 'date' })
-
-      const {
-        data: { balances },
-      } = await getAccountBalanceById(account.id)
+      const balance = await getAccountBalanceById(account.id)
 
       const {
         data: { transactions },
       } = await getAccountTransactionsById(account.id, fromDate)
 
-      const totalBalance = gocardlessCurrency(balances && balances[0]?.balanceAmount.amount).value
+      const totalBalance = gocardlessCurrency(balance).value
       const transformed = transformTransactions(transactions.booked, totalBalance).reverse()
 
       const results = await prisma.$transaction([

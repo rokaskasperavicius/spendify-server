@@ -71,15 +71,13 @@ export const getAvailableAccounts = async (
     const { data: details } = await getAccountDetailsById(accountId)
     const { data: institution } = await getInstitutionById(String(metadata.institution_id))
 
-    const {
-      data: { balances },
-    } = await getAccountBalanceById(accountId)
+    const balance = await getAccountBalanceById(accountId)
 
     return {
       accountId,
       accountName: metadata.name,
       accountIban: metadata.iban,
-      accountBalance: `${gocardlessCurrency(balances && balances[0]?.balanceAmount.amount).format()} ${details.account.currency}`,
+      accountBalance: `${gocardlessCurrency(balance).format()} ${details.account.currency}`,
       institutionLogo: institution.logo,
     }
   })

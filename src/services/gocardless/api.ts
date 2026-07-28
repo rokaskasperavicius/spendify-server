@@ -24,8 +24,24 @@ export const createNordigenAgreement = (body: EndUserAgreementBody) =>
 export const createNordigenRequisition = (body: RequisitionBody) =>
   gocardlessApi.post<Requisition, AxiosResponse<Requisition>, RequisitionBody>('/requisitions/', body)
 
-export const getAccountBalanceById = (accountId: string) =>
-  gocardlessApi.get<AccountBalance>(`/accounts/${accountId}/balances/`)
+export const getAccountBalanceById = async (accountId: string) => {
+  const {
+    data: { balances },
+  } = await gocardlessApi.get<AccountBalance>(`/accounts/${accountId}/balances/`)
+  const finalBalanceTypes = ['closingBooked', 'expected', 'interimBooked']
+
+  if (!balances || balances.length === 0) return '0'
+
+  const balance = balances.find((balance) => finalBalanceTypes.includes(balance.balanceType))
+
+  // If finalBalanceTypes is missing some other type, fallback to first in list
+  // https://developer.gocardless.com/bank-account-data/balance/#balance_type
+  if (!balance) {
+    return balances[0]?.balanceAmount.amount || '0'
+  }
+
+  return balance.balanceAmount.amount
+}
 
 export const getAccountDetailsById = (accountId: string) =>
   gocardlessApi.get<AccountDetails>(`/accounts/${accountId}/details/`)
