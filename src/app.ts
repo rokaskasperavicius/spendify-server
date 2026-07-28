@@ -53,6 +53,10 @@ app.use('/openapi.yaml', (req, res) => {
   res.sendFile('./openapi/openapi.yaml', { root: __dirname })
 })
 
+app.get('/version', (req, res) => {
+  res.json({ sha: process.env.GIT_REV || 'unknown' })
+})
+
 app.use('/api/v1', apiRoutes)
 
 // custom 404
