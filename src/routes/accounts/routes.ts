@@ -25,6 +25,7 @@ const app = express.Router()
 
 app.get('/countries', validateSchema(GetAccountCountriesSchema), getAccountCountries)
 app.get('/institutions', validateSchema(GetAccountInstitutionsSchema), getAccountInstitutions)
+
 app.post('/create-requisition', verifyUser, validateSchema(CreateAccountRequisitionSchema), createAccountRequisition)
 app.get('/available/:requisitionId', verifyUser, validateSchema(GetAvailableAccountsSchema), getAvailableAccounts)
 app.get('/', verifyUser, getAccounts)
@@ -36,7 +37,7 @@ app.get(
   validateSchema(GetAccountTransactionsMonthlyOverview),
   getAccountTransactionsMonthlyOverview,
 )
-app.delete('/', verifyUser, validateSchema(DeleteAccountSchema), deleteAccount)
+app.delete('/:accountId', verifyUser, validateSchema(DeleteAccountSchema), deleteAccount)
 app.get('/sync', validateSchema(SyncAccountStatusesSchema), syncAccountStatusesHandler)
 app.get('/transactions/sync', validateSchema(SyncAccountTransactionsSchema), syncAccountTransactions)
 app.get(

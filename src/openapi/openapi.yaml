@@ -650,23 +650,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+  /accounts/{accountId}:
     delete:
       summary: Delete User's Account
       operationId: deleteUsersAccount
       tags:
         - Accounts API
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - accountId
-              properties:
-                accountId:
-                  type: string
-                  example: 'bbcdb297-acce-4d4a-8678-8344ee92d195'
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+          description: User's Account ID
       responses:
         '200':
           description: Success
